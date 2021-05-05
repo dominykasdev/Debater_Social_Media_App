@@ -1,13 +1,18 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const path = require('path');
 require('dotenv').config()
 
+const corsOptions = {
+    origin: process.env.CORS_ORIGIN_DEV,
+    optionsSuccessStatus: 200
+}
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/api/users', require('./routers/api/users'));
-app.use('/api/posts', require('./routers/api/posts'));
+app.use('/api/users', cors(corsOptions), require('./routers/api/users'));
+app.use('/api/posts', cors(corsOptions), require('./routers/api/posts'));
 
 
 app.use(express.static(path.join(__dirname, "public")));

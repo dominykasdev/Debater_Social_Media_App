@@ -14,10 +14,10 @@ class Header extends React.Component {
         // console.log(this.props.menu)
         return (
             <div className="header">
-                {/* <h2 className="title">{title}</h2> */}
+                <h2 className="title centered">Debater</h2>
                 {/* <button className="menuBtn left" onClick={() => this.props.toggleMenu()}><img src={menuImg} alt="menuImg" /></button> */}
                 <GoogleAuth />
-            </div >
+            </div>
         )
     }
 }

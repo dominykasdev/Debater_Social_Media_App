@@ -11,6 +11,7 @@ const ObjectId = require('mongodb').ObjectID;
 // else
 //     console.log("Db connected successfully")
 
+
 const url = process.env.DB_URL_DEV;
 
 // get all users
