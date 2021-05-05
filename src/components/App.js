@@ -8,6 +8,7 @@ import {
     useParams
   } from "react-router-dom";
   import history from '../history';
+  import registerForm from './registerComponents';
   import userProfile from './profileComponents';
   import post from './postComponents';
   import pageNotFound from './pageNotFound';
@@ -21,6 +22,7 @@ const App = () => {
           <Header />
           <Switch>
             <Route path="/" exact component={null} />
+            <Route path="/register" exact component={registerForm} />
             <Route path="/user/:username" exact component={userProfile} />
             <Route path="/post/:postId" exact component={post} />
             <Route component={pageNotFound} />

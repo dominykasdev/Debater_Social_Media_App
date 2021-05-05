@@ -18,7 +18,7 @@ class UserProfile extends React.Component {
             return (
                 <Container>
                     <Item>
-                        <Item.Image size="small" src="https://picsum.photos/id/177/200" />
+                        <Item.Image size="small" src="https://picsum.photos/200" />
                         <Item.Content>
                             <Item.Header>{this.props.displayName}</Item.Header>
                             <Item.Meta>@{this.props.username}</Item.Meta>

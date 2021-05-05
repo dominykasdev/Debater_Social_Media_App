@@ -1,56 +1,14 @@
 import api from "../api/connect";
-import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA} from "./type";
+import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA} from "./type";
 import history from '../history';
-
-// export const fetchCryptoData = (symbols, currency) => async dispatch => {
-
-//   const livePath = "/projects/api_test/displayData.php";
-//   const placeholderPath = "/projects/api_test/displayDataPlaceholder.php";
-//   let urlPath = '';
-
-//   symbols == undefined ? urlPath = placeholderPath : urlPath = livePath;
-
-//   const response = await coinMarketCap.get(
-//     urlPath + "?symbol=" + symbols + '&convert=' + currency
-//   );
-//   // console.log(response);
-
-//   let cryptoArray = [];
-
-//   for (var key in response.data.data) {
-//     if (response.data.data.hasOwnProperty(key)) {
-//       cryptoArray.push(response.data.data[key]);
-//     }
-//   }
-
-//   dispatch({ type: FETCH_CRYPTO, payload: cryptoArray });
-// };
-
-// export const toggleMenu = (closed) => {
-//   return {
-//     type: TOGGLE_MENU,
-//     payload: closed
-//   }
-// };
 
 export const fetchUserData = (userId) => async (dispatch, getState) => {
   const path = "/users/";
-  // const { userId } = getState().auth;
 
   const response = await api.get(
     path + userId
   );
-  // console.log(response.data);
-  // let results = { holdings: [] };
-  // let i = 0;
-  // Object.keys(response.data).forEach((key, index) => {
-  //   if (key.indexOf('crypto_symbol_0') > -1 || key.indexOf('crypto_holding_0') > -1 || key.indexOf('invested_0') > -1) {
-  //     i = key.slice(-1);
-  //     results.holdings[i] = { ...results.holdings[i], [key.substring(0, key.length - 3)]: response.data[key] }
-  //   } else {
-  //     results[key] = response.data[key];
-  //   }
-  // });
+
   console.log(response.data);
 
   dispatch({ type: FETCH_USER_DATA, payload: response.data });
@@ -85,6 +43,18 @@ export const fetchUserData = (userId) => async (dispatch, getState) => {
 
 //   dispatch({ type: REGISTER_USER, payload: response });
 // }
+
+export const fetchPostData = (postId) => async (dispatch, getState) => {
+  const path = "/posts/";
+
+  const response = await api.get(
+    path + postId
+  );
+
+  console.log(response.data);
+
+  dispatch({ type: FETCH_POST_DATA, payload: response.data });
+}
 
 export const signIn = (userId) => {
   return {
