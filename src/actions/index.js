@@ -1,16 +1,10 @@
 import api from "../api/connect";
-import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA} from "./type";
+import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED} from "./type";
 import history from '../history';
 
 export const fetchUserData = (userId) => async (dispatch, getState) => {
   const path = "/users/";
-
-  const response = await api.get(
-    path + userId
-  );
-
-  console.log(response.data);
-
+  const response = await api.get(path + userId);
   dispatch({ type: FETCH_USER_DATA, payload: response.data });
 }
 
@@ -46,14 +40,17 @@ export const fetchUserData = (userId) => async (dispatch, getState) => {
 
 export const fetchPostData = (postId) => async (dispatch, getState) => {
   const path = "/posts/";
-
-  const response = await api.get(
-    path + postId
-  );
-
-  console.log(response.data);
-
+  const response = await api.get(path + postId);
   dispatch({ type: FETCH_POST_DATA, payload: response.data });
+}
+
+export const fetchPostFeed = (user, orderBy = "timestamp", order = 1) => async (dispatch, getState) => {
+  console.log(order);
+  let path;
+  user ? path = `/posts/?user=${user}&orderBy=${orderBy}&order=${order}` : path="/posts/";  
+  console.log(path);
+  const response = await api.get(path);
+  dispatch({ type: FETCH_POST_FEED, payload: response.data });
 }
 
 export const signIn = (userId) => {

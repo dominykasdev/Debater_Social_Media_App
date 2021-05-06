@@ -19,7 +19,7 @@ class Header extends React.Component {
                     {/* <button className="menuBtn left" onClick={() => this.props.toggleMenu()}><img src={menuImg} alt="menuImg" /></button> */}
                 </div>
                 <div className="eight wide column">
-                    <h2 className="ui header center aligned orange"><i className="bullhorn icon orange" />Debater</h2>
+                    <a className="ui header center aligned orange" href="/"><h2><i className="bullhorn icon orange" />Debater</h2></a>
                 </div>
                 <div className="right aligned four wide column">
                     <GoogleAuth />

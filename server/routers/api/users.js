@@ -82,6 +82,7 @@ router.post('/', (req, res) => {
                 username: req.body.username,
                 email: req.body.email,
                 description: req.body.description,
+                joinDate: new Date(),
                 status: "active"
             }, (err, results) => {
                 if(err) throw err;

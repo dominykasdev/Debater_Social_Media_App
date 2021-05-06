@@ -11,6 +11,7 @@ import {
   import registerForm from './registerComponents';
   import userProfile from './profileComponents';
   import post from './postComponents';
+  import postFeed from './postComponents/postFeed';
   import pageNotFound from './pageNotFound';
 
 
@@ -21,7 +22,7 @@ const App = () => {
         <div>
           <Header />
           <Switch>
-            <Route path="/" exact component={null} />
+            <Route path="/" exact component={postFeed} />
             <Route path="/register" exact component={registerForm} />
             <Route path="/user/:username" exact component={userProfile} />
             <Route path="/post/:postId" exact component={post} />
