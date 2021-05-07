@@ -6,6 +6,7 @@ require('dotenv').config()
 
 const corsOptions = {
     origin: process.env.CORS_ORIGIN_DEV,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     optionsSuccessStatus: 200
 }
 app.use(express.urlencoded({ extended: true }));

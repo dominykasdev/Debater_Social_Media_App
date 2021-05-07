@@ -3,7 +3,7 @@ import oAuthReducer from "./oAuthReducer";
 import userReducer from "./userReducer";
 import postReducer from "./postReducer";
 import postFeedReducer from "./postFeedReducer";
-import commentFeedReducer from "./commentFeedReducer";
+import commentReducer from "./commentReducer";
 import { reducer as FormReducer } from 'redux-form';
 
 export default combineReducers({
@@ -12,5 +12,5 @@ export default combineReducers({
   user: userReducer,
   post: postReducer,
   postFeed: postFeedReducer,
-  commentFeed: commentFeedReducer
+  commentFeed: commentReducer
 });

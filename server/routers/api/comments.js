@@ -35,42 +35,41 @@ router.get('/', (req, res) => {
         const user = req.query.user;
         const orderBy = req.query.orderBy; // order target
         const order = parseInt(req.query.order); // asc || desc
-        console.log(req.query);
         if (user) {
             if (/^-?\d+$/.test(user.substr(0, 1))) {
                 dbo.collection("comments")
-                .find({ "userId": user })
-                .limit(25)
-                .sort({ orderBy: order })
-                .toArray((err, results) => {
-                    if (err) throw err;
-                    res.send(results);
-                    db.close();
-                });
+                    .find({ "userId": user })
+                    .limit(25)
+                    .sort({ orderBy: order })
+                    .toArray((err, results) => {
+                        if (err) throw err;
+                        res.send(results);
+                        db.close();
+                    });
             } else {
                 dbo.collection("comments")
-                .find({ "username": user }, {"userId":0})
-                .limit(25)
-                .sort({ orderBy: order })
-                .toArray((err, results) => {
-                    if (err) throw err;
-                    res.send(results);
-                    db.close();
-                });
+                    .find({ "username": user }, { "userId": 0 })
+                    .limit(25)
+                    .sort({ orderBy: order })
+                    .toArray((err, results) => {
+                        if (err) throw err;
+                        res.send(results);
+                        db.close();
+                    });
             }
         } else {
             MongoClient(url, (err, db) => {
                 if (err) throw err;
                 const dbo = db.db(process.env.DB_NAME);
                 dbo.collection("comments")
-                .find({ "postId": postId }, {"userId":0})
-                .limit(25)
-                .sort({ orderBy: order })
-                .toArray((err, results) => {
-                    if (err) throw err;
-                    res.send(results);
-                    db.close();
-                });
+                    .find({ "postId": postId }, { "userId": 0 })
+                    .limit(25)
+                    .sort({ orderBy: order })
+                    .toArray((err, results) => {
+                        if (err) throw err;
+                        res.send(results);
+                        db.close();
+                    });
             })
         }
     });
@@ -98,18 +97,25 @@ router.post('/', (req, res) => {
 });
 
 // edit comment
-router.put('/:id', (req, res) => {
+router.patch('/:id', (req, res) => {
     MongoClient(url, (err, db) => {
         if (err) throw err;
         const id = new ObjectId.createFromHexString(req.params.id);
         const dbo = db.db(process.env.DB_NAME);
-        console.log(req.body);
-        const updateData = { ...req.body, editTimestamp: new Date() };
-        dbo.collection("comments").updateOne({ "_id": id }, { $set: updateData }, (err, results) => {
-            if (err) throw err;
-            res.send(results);
-            db.close();
-        });
+        if (req.body.hasOwnProperty('likes') || req.body.hasOwnProperty('dislikes')) {
+            dbo.collection("comments").updateOne({ "_id": id }, { $inc: req.body }, (err, results) => {
+                if (err) throw err;
+                res.send(results);
+                db.close();
+            });
+        } else {
+            const updateData = { ...req.body, editTimestamp: new Date() };
+            dbo.collection("comments").updateOne({ "_id": id }, { $set: updateData }, (err, results) => {
+                if (err) throw err;
+                res.send(results);
+                db.close();
+            });
+        }
     })
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchCommentFeed } from '../../actions';
+import { fetchCommentFeed, updateComment } from '../../actions';
 import { connect } from 'react-redux';
 import Loader from '../loaderComponents';
 import { Icon, Container, Segment, Comment } from 'semantic-ui-react';
@@ -14,11 +14,24 @@ class CommentFeed extends React.Component {
         // if (this.props.username) this.props.fetchUserData(this.props.username);
     }
 
+    toggleVote = (voteType, value, commentId) => {
+        switch (voteType) {
+            case "up":
+                return (
+                    <Icon name='thumbs up' onClick={()=>{this.props.updateComment(commentId, { "likes": 1 })}}>{value}</Icon>
+                )
+            case "down":
+                return (
+                    <Icon name='thumbs down' onClick={()=>{this.props.updateComment(commentId, { "dislikes": 1 })}}>{value}</Icon>
+                )
+        }
+    }
+
     commentFeedList = () => {
         const feedList = [];
         this.props.commentFeed.forEach((item, index) => {
             feedList.push(
-                <Comment>
+                <Comment key={item._id}>
                     <Comment.Avatar as='a' href={`../user/${item.username}`} src="https://picsum.photos/200" />
                     <Comment.Content>
                         <Comment.Author as="a" href={`../user/${item.username}`}>{item.username}</Comment.Author>
@@ -32,8 +45,8 @@ class CommentFeed extends React.Component {
                         </Comment.Text>
                         <Comment.Actions>
                             <Comment.Action>Reply</Comment.Action>
-                            <Comment.Action><Icon name='thumbs up' /></Comment.Action>{item.likes}
-                            <Comment.Action><Icon name='thumbs down' /></Comment.Action>{item.dislikes}
+                            <Comment.Action>{this.toggleVote("up", item.likes, item._id)}{/*<Icon name='thumbs up' />{item.likes}*/}</Comment.Action>
+                            <Comment.Action>{this.toggleVote("down", item.dislikes, item._id)}{/*<Icon name='thumbs down' />{item.dislikes}*/}</Comment.Action>
                         </Comment.Actions>
                     </Comment.Content>
                 </Comment>
@@ -58,7 +71,11 @@ class CommentFeed extends React.Component {
             )
         } else {
             return (
-                <Loader />
+                <Container text>
+                    <Segment>
+                        <p>This post has no comments</p>
+                    </Segment>
+                </Container>
             )
         }
     }
@@ -68,4 +85,4 @@ const mapStateToProps = (state) => {
     return { /*'displayName': state.user.displayName,*/ "commentFeed": state.commentFeed }
 }
 
-export default connect(mapStateToProps, { fetchCommentFeed })(CommentFeed);
+export default connect(mapStateToProps, { fetchCommentFeed, updateComment })(CommentFeed);

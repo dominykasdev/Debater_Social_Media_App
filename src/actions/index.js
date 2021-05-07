@@ -1,5 +1,5 @@
 import api from "../api/connect";
-import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED} from "./type";
+import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED, UPDATE_COMMENT, DELETE_COMMENT} from "./type";
 import history from '../history';
 
 export const fetchUserData = (userId) => async (dispatch, getState) => {
@@ -58,8 +58,27 @@ export const fetchCommentFeed = (postId, orderBy = "timestamp", order = 1) => as
   let path;
   postId ? path = `/comments/?postId=${postId}&orderBy=${orderBy}&order=${order}` : path="/posts/";  
   console.log(path);
-  const response = await api.get(path);
+  const response = await api.get(path).catch(error => {
+    if (!error.response) {
+        // network error
+        this.errorStatus = 'Error: Network Error';
+    } else {
+        this.errorStatus = error.response.data.message;
+    }
+  });
   dispatch({ type: FETCH_COMMENT_FEED, payload: response.data });
+}
+
+export const updateComment = (commentId, bodyData) => async (dispatch, getState) => {
+  const path = `/comments/${commentId}`;
+  const response = await api.patch(path, bodyData);
+  dispatch({ type: UPDATE_COMMENT, payload: response.data });
+}
+
+export const deleteComment = (commentId) => async (dispatch, getState) => {
+  const path = `/comments/${commentId}`;
+  const response = await api.delete(path);
+  dispatch({ type: DELETE_COMMENT, payload: response.data });
 }
 
 export const signIn = (userId) => {
