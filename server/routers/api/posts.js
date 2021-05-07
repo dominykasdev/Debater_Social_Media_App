@@ -66,7 +66,7 @@ router.get('/', (req, res) => {
                 dbo.collection("posts")
                 .find({}, {"userId":0})
                 .limit(25)
-                .sort({ "timestamp": 1 })
+                .sort({ "timestamp": -1 })
                 .toArray((err, results) => {
                     if (err) throw err;
                     res.send(results);

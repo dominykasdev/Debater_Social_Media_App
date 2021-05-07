@@ -1,5 +1,5 @@
 import api from "../api/connect";
-import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED} from "./type";
+import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED} from "./type";
 import history from '../history';
 
 export const fetchUserData = (userId) => async (dispatch, getState) => {
@@ -51,6 +51,15 @@ export const fetchPostFeed = (user, orderBy = "timestamp", order = 1) => async (
   console.log(path);
   const response = await api.get(path);
   dispatch({ type: FETCH_POST_FEED, payload: response.data });
+}
+
+export const fetchCommentFeed = (postId, orderBy = "timestamp", order = 1) => async (dispatch, getState) => {
+  console.log(order);
+  let path;
+  postId ? path = `/comments/?postId=${postId}&orderBy=${orderBy}&order=${order}` : path="/posts/";  
+  console.log(path);
+  const response = await api.get(path);
+  dispatch({ type: FETCH_COMMENT_FEED, payload: response.data });
 }
 
 export const signIn = (userId) => {

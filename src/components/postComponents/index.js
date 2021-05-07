@@ -2,7 +2,8 @@ import React from 'react';
 import { fetchPostData, fetchUserData } from '../../actions';
 import { connect } from 'react-redux';
 import Loader from '../loaderComponents';
-import { Grid, Item } from 'semantic-ui-react';
+import { Container, Item } from 'semantic-ui-react';
+import CommentFeed from '../commentComponents';
 
 class Post extends React.Component {
     constructor(props) {
@@ -19,8 +20,7 @@ class Post extends React.Component {
             let editTimestamp;
             if (this.props.editTimestamp) editTimestamp = `Last edited on ${this.props.editTimestamp}`;
             return (
-                <Grid centered>
-                    <Grid.Column doubling width="8">
+                <Container text>
                         <Item.Group>
                             <Item className="post">
                             <Item.Image size="tiny" bordered rounded src="https://picsum.photos/200" />
@@ -36,8 +36,8 @@ class Post extends React.Component {
                                 </Item.Content>
                             </Item>
                         </Item.Group>
-                    </Grid.Column>
-                </Grid>
+                        <CommentFeed postId={this.props.match.params.postId} />
+                </Container>
             )
         } else {
             return (

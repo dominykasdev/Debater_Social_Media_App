@@ -3,3 +3,4 @@ export const SIGN_OUT = "SIGN_OUT";
 export const FETCH_USER_DATA = "FETCH_USER_DATA";
 export const FETCH_POST_DATA = "FETCH_POST_DATA";
 export const FETCH_POST_FEED = "FETCH_POST_FEED";
+export const FETCH_COMMENT_FEED = "FETCH_COMMENT_FEED";

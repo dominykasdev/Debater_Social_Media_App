@@ -2,7 +2,7 @@ import React from 'react';
 import { fetchPostFeed } from '../../actions';
 import { connect } from 'react-redux';
 import Loader from '../loaderComponents';
-import { Grid, Feed, Icon } from 'semantic-ui-react';
+import { Grid, Feed, Icon, Container, Segment } from 'semantic-ui-react';
 
 class PostFeed extends React.Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class PostFeed extends React.Component {
                         </Feed.Extra>
                         <Feed.Meta>
                             <Feed.Like>
-                                <Icon name='thumbs up' />{item.likes}
+                                <Icon name='thumbs up green' />{item.likes}
                             </Feed.Like>
                             <Feed.Like>
                                 <Icon name='thumbs down' />{item.dislikes}
@@ -54,11 +54,11 @@ class PostFeed extends React.Component {
             // let editTimestamp;
             // if (this.props.editTimestamp) editTimestamp = `Last edited on ${this.props.editTimestamp}`;
             return (
-                <Grid centered>
-                    <Grid.Column width="8">
+                <Container text>
+                    <Segment>
                         {this.postFeedList()}
-                    </Grid.Column>
-                </Grid>
+                    </Segment>
+                </Container>
             )
         } else {
             return (

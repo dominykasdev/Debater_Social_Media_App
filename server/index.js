@@ -13,6 +13,7 @@ app.use(express.json());
 
 app.use('/api/users', cors(corsOptions), require('./routers/api/users'));
 app.use('/api/posts', cors(corsOptions), require('./routers/api/posts'));
+app.use('/api/comments', cors(corsOptions), require('./routers/api/comments'));
 
 
 app.use(express.static(path.join(__dirname, "public")));
