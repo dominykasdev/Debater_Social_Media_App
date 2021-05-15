@@ -33,8 +33,8 @@ router.get('/', (req, res) => {
         const dbo = db.db(process.env.DB_NAME);
         const postId = req.query.postId;
         const user = req.query.user;
-        const orderBy = req.query.orderBy; // order target
-        const order = parseInt(req.query.order); // asc || desc
+        const orderBy = req.query.orderBy ? req.query.orderBy: 'timestamp'; // order target
+        const order = req.query.order ? parseInt(req.query.order) : -1; // asc || desc
         if (user) {
             if (/^-?\d+$/.test(user.substr(0, 1))) {
                 dbo.collection("comments")

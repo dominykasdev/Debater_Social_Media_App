@@ -14,18 +14,18 @@ class CommentFeed extends React.Component {
         // if (this.props.username) this.props.fetchUserData(this.props.username);
     }
 
-    toggleVote = (voteType, value, commentId) => {
-        switch (voteType) {
-            case "up":
-                return (
-                    <Icon name='thumbs up' onClick={()=>{this.props.updateComment(commentId, { "likes": 1 })}}>{value}</Icon>
-                )
-            case "down":
-                return (
-                    <Icon name='thumbs down' onClick={()=>{this.props.updateComment(commentId, { "dislikes": 1 })}}>{value}</Icon>
-                )
-        }
-    }
+    // toggleVote = (voteType, value, commentId) => {
+    //     switch (voteType) {
+    //         case "up":
+    //             return (
+    //                 <Icon name='thumbs up' onClick={() => { this.props.updateComment(commentId, { "likes": 1 }) }}>{value}</Icon>
+    //             )
+    //         case "down":
+    //             return (
+    //                 <Icon name='thumbs down' onClick={() => { this.props.updateComment(commentId, { "dislikes": 1 }) }}>{value}</Icon>
+    //             )
+    //     }
+    // }
 
     commentFeedList = () => {
         const feedList = [];
@@ -45,8 +45,12 @@ class CommentFeed extends React.Component {
                         </Comment.Text>
                         <Comment.Actions>
                             <Comment.Action>Reply</Comment.Action>
-                            <Comment.Action>{this.toggleVote("up", item.likes, item._id)}{/*<Icon name='thumbs up' />{item.likes}*/}</Comment.Action>
-                            <Comment.Action>{this.toggleVote("down", item.dislikes, item._id)}{/*<Icon name='thumbs down' />{item.dislikes}*/}</Comment.Action>
+                            <Comment.Action>
+                                <Icon name='thumbs up' onClick={() => { this.props.updateComment(item._id, { "likes": 1 }) }}>{item.likes}</Icon>
+                            </Comment.Action>
+                            <Comment.Action>
+                                <Icon name='thumbs down' onClick={() => { this.props.updateComment(item._id, { "dislikes": 1 }) }}>{item.dislikes}</Icon>
+                            </Comment.Action>
                         </Comment.Actions>
                     </Comment.Content>
                 </Comment>
