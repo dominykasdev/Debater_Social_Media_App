@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchUserData } from '../../actions';
-import { Field, reduxForm, getFormValues, getFormError } from 'redux-form';
+import { Field, reduxForm, getFormValues, getFormSyncErrors } from 'redux-form';
 import { Container, Button, Form, Message, Progress, Checkbox, Label, Icon } from 'semantic-ui-react';
 import validate from './validate';
+import asyncValidate from './asyncValidate';
 
 class RegisterForm extends React.Component {
 
@@ -12,8 +13,12 @@ class RegisterForm extends React.Component {
         console.log(this.props.formErrors);
     }
 
+    progressBarCounter(errors = this.props.formErrors){
+        const numOfErrors = Object.keys(errors).length;
+        return 4-numOfErrors;
+    }
+
     render() {
-        console.log(this.props.formErrors);
         return (
             <Container>
                 <Form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui centered text aligned">
@@ -21,12 +26,11 @@ class RegisterForm extends React.Component {
                     <Field name="email" type="email" component={renderField} label="Email" placeholder="Enter your email that you will use to login" icon="at" />
                     <Field name="password" type="password" component={renderField} label="Password" placeholder="" />
                     <Field name="confirmPassword" type="password" component={renderField} label="Confirm your Password" placeholder="" />
-                    <Progress active size="small" color="orange" value='3' total='4' progress='ratio' />
-                    <Button primary type="submit">Register</Button>
+                    <Progress active autoSuccess size="small" color="orange" label={this.progressBarCounter() === 4 ? "You're good to go!" : "Registration progress..."} value={this.progressBarCounter()} total='4' />
+                    <Button color="orange" type="submit">Register</Button>
                 </Form>
             </Container>
         )
-
     }
 }
 
@@ -39,7 +43,7 @@ const renderField = ({
     meta: { touched, error, warning },
     icon
 }) => (
-    <Form.Input required fluid inline {...input} value={input.value} name={name} type={type} onChange={(param, { value }) => input.onChange(value)} label={label} placeholder={placeholder} error={touched && error && { content: error, pointing: "above" }} iconPosition='left'>
+    <Form.Input fluid inline {...input} value={input.value} name={name} type={type} onChange={(param, { value }) => input.onChange(value)} label={label} placeholder={placeholder} error={touched && error && { content: error, pointing: "above" }} iconPosition='left'>
         {/* {<Form.Input required fluid {...input} value={input.value} name={name} type={type} onChange={(param, { value }) => input.onChange(value)} label={label} placeholder={placeholder} iconPosition='left'>} */}
         {icon && <Icon color="orange" name={icon} />}
         <input />
@@ -48,13 +52,9 @@ const renderField = ({
 );
 
 const mapStateToProps = (state) => {
-    return { formData: getFormValues('register')(state), formErrors: getFormError('register')(state) }
+    return { formData: getFormValues('register')(state), formErrors: getFormSyncErrors('register')(state) }
 }
 
+RegisterForm = reduxForm({ form: 'register', validate, asyncValidate, asyncBlurFields: ['username'] })(RegisterForm);
 
-// export default reduxForm({ form: 'register', validate })(RegisterForm);
-
-RegisterForm = reduxForm({ form: 'register', validate })(RegisterForm);
-
-
-export default connect(mapStateToProps, { fetchUserData })(RegisterForm);
+export default connect(mapStateToProps, { fetchUserData, getFormSyncErrors })(RegisterForm);

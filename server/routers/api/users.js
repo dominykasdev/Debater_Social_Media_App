@@ -16,37 +16,51 @@ const url = process.env.DB_URL_DEV;
 
 // get all users
 router.get('/', (req, res) => {
-      MongoClient(url, (err, db) => {
-          if(err) throw err;
-          const dbo = db.db(process.env.DB_NAME);
-          dbo.collection("users").find({}).toArray((err, results) => {
-              if(err) throw err;
-              res.send(results);
-                db.close();
-          });
-      })
+    MongoClient(url, (err, db) => {
+        if (err) throw err;
+        const dbo = db.db(process.env.DB_NAME);
+        dbo.collection("users").find({}).toArray((err, results) => {
+            if (err) throw err;
+            res.send(results);
+            db.close();
+        });
+    })
 });
 
 // get single user, searches via username or id
 router.get('/:userParam', (req, res) => {
     MongoClient(url, (err, db) => {
-        if(err) throw err;
-            const dbo = db.db(process.env.DB_NAME);
-            let userParam;
-            if(/^-?\d+$/.test(req.params.userParam.substr(0,1))) {
-                userParam = new ObjectId.createFromHexString(req.params.userParam);
-            dbo.collection("users").findOne({"_id": userParam}, (err, results) => {
-                if(err) throw err;
+        if (err) throw err;
+        const dbo = db.db(process.env.DB_NAME);
+        let userParam;
+        if (/^-?\d+$/.test(req.params.userParam.substr(0, 1))) {
+            userParam = new ObjectId.createFromHexString(req.params.userParam);
+            dbo.collection("users").findOne({ "_id": userParam }, (err, results) => {
+                if (err) throw err;
                 res.send(results);
                 db.close();
-            });} else {
-                userParam = req.params.userParam;
-            dbo.collection("users").findOne({"username": userParam}, (err, results) => {
-                if(err) throw err;
+            });
+        } else {
+            userParam = req.params.userParam;
+            dbo.collection("users").findOne({ "username": userParam }, (err, results) => {
+                if (err) throw err;
                 res.send(results);
                 db.close();
             });
         }
+    });
+});
+
+// get single user, searches via username or id
+router.get('/available/:username', (req, res) => {
+    MongoClient(url, (err, db) => {
+        if (err) throw err;
+        const dbo = db.db(process.env.DB_NAME);
+        dbo.collection("users").findOne({ username: req.params.username }, { fields: { username: 1, _id: 0 } }, (err, results) => {
+            if (err) throw err;
+            res.send(results);
+            db.close();
+        });
     });
 });
 
@@ -75,31 +89,31 @@ router.get('/:userParam', (req, res) => {
 // create user
 router.post('/', (req, res) => {
     MongoClient(url, (err, db) => {
-            if(err) throw err;
-            const dbo = db.db(process.env.DB_NAME);
-            dbo.collection("users").insertOne({
-                displayName: req.body.displayName,
-                username: req.body.username,
-                email: req.body.email,
-                description: req.body.description,
-                joinDate: new Date(),
-                status: "active"
-            }, (err, results) => {
-                if(err) throw err;
-                res.send(results);
-                db.close();
-            });
-        })
+        if (err) throw err;
+        const dbo = db.db(process.env.DB_NAME);
+        dbo.collection("users").insertOne({
+            displayName: req.body.displayName,
+            username: req.body.username,
+            email: req.body.email,
+            description: req.body.description,
+            joinDate: new Date(),
+            status: "active"
+        }, (err, results) => {
+            if (err) throw err;
+            res.send(results);
+            db.close();
+        });
+    })
 });
 
 // edit user
 router.put('/:id', (req, res) => {
     MongoClient(url, (err, db) => {
-        if(err) throw err;
+        if (err) throw err;
         const id = new ObjectId.createFromHexString(req.params.id);
         const dbo = db.db(process.env.DB_NAME);
-        dbo.collection("users").updateOne({"_id": id}, { $set: req.body}, (err, results) => {
-            if(err) throw err;
+        dbo.collection("users").updateOne({ "_id": id }, { $set: req.body }, (err, results) => {
+            if (err) throw err;
             res.send(results);
             db.close();
         });
@@ -109,11 +123,11 @@ router.put('/:id', (req, res) => {
 // delete user
 router.delete('/:id', (req, res) => {
     MongoClient(url, (err, db) => {
-        if(err) throw err;
+        if (err) throw err;
         const id = new ObjectId.createFromHexString(req.params.id);
         const dbo = db.db(process.env.DB_NAME);
-        dbo.collection("users").deleteOne({"_id": id}, (err, results) => {
-            if(err) throw err;
+        dbo.collection("users").deleteOne({ "_id": id }, (err, results) => {
+            if (err) throw err;
             res.send(results);
             db.close();
         });

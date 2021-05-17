@@ -22,7 +22,9 @@ class Header extends React.Component {
                     <a className="ui header center aligned orange" href="/"><h2><i className="bullhorn icon orange" />Debater</h2></a>
                 </div>
                 <div className="right aligned four wide column">
-                    <GoogleAuth />
+                    <a className="ui orange compact button inverted" href="/register"><i className="align signup icon" />Register</a>
+                    <a className="ui orange compact button inverted" href="/login"><i className="align sign-in icon" />Login</a>
+                    {/* <GoogleAuth /> */}
                 </div>
             </div>
         )
