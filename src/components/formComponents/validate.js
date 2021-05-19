@@ -4,7 +4,7 @@ const validate = values => {
     const errors = {};
     if (!values.username) {
         errors.username = 'Required';
-    } else if (!/^[A-Za-z][A-Za-z0-9 -]*$/.test(values.username)){
+    } else if (!/^[A-Za-z][A-Za-z0-9 -]*$/.test(values.username)) {
         errors.username = 'Username must not begin with number or symbol!'
     }
 

@@ -1,5 +1,5 @@
 import api from "../api/connect";
-import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED, UPDATE_COMMENT, DELETE_COMMENT} from "./type";
+import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED, UPDATE_COMMENT, DELETE_COMMENT, REGISTER_USER} from "./type";
 import history from '../history';
 
 export const fetchUserData = (userId) => async (dispatch, getState) => {
@@ -22,21 +22,20 @@ export const fetchUserData = (userId) => async (dispatch, getState) => {
 //   if (action == 'update_holdings') { history.push("/projects/crypto_app/holdings") };
 // }
 
-// export const registerUser = (userId) => async (dispatch, getState) => {
-//   const path = "/projects/api_test/";
-//   const { userId } = getState().auth;
+export const registerUser = (registerData) => async (dispatch, getState) => {
+  const path = "/users/register/";
 
-//   const response = await coinMarketCap.post(
-//     path, { 'id': userId, 'action': 'register' }
-//   ).then((e) => {
-//     console.log(e);
-//   }).catch((error) => {
-//     console.log(error.response);
-//   });
-//   console.log(response);
+  console.log(registerData);
+  const response = await api.post(
+    path, registerData
+  ).catch((error) => {
+    console.log(error);
+  });
+  console.log(response);
 
-//   dispatch({ type: REGISTER_USER, payload: response });
-// }
+  dispatch({ type: REGISTER_USER, payload: response.data });
+  // history.push("/login");
+}
 
 export const fetchPostData = (postId) => async (dispatch, getState) => {
   const path = "/posts/";
@@ -45,7 +44,6 @@ export const fetchPostData = (postId) => async (dispatch, getState) => {
 }
 
 export const fetchPostFeed = (user, orderBy = "timestamp", order = 1) => async (dispatch, getState) => {
-  console.log(order);
   let path;
   user ? path = `/posts/?user=${user}&orderBy=${orderBy}&order=${order}` : path="/posts/";  
   console.log(path);
@@ -54,7 +52,6 @@ export const fetchPostFeed = (user, orderBy = "timestamp", order = 1) => async (
 }
 
 export const fetchCommentFeed = (postId, orderBy = "timestamp", order = 1) => async (dispatch, getState) => {
-  console.log(order);
   let path;
   postId ? path = `/comments/?postId=${postId}&orderBy=${orderBy}&order=${order}` : path="/posts/";  
   console.log(path);

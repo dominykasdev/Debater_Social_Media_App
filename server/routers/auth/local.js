@@ -1,3 +1,3 @@
 const passport = require('passport');
-const passportLoval = require('passport-local');
+const passportLocal = require('passport-local');
 

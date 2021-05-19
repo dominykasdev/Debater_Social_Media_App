@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const MongoClient = require('../../mongoClient');//require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectID;
+const bCrypt = require('bcryptjs');
 // const mongoose = require('mongoose');
 // mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true });
 // const db = mongoose.connection;
@@ -52,17 +53,48 @@ router.get('/:userParam', (req, res) => {
 });
 
 // get single user, searches via username or id
-router.get('/available/:username', (req, res) => {
+router.get('/available/:check', (req, res) => {
     MongoClient(url, (err, db) => {
         if (err) throw err;
         const dbo = db.db(process.env.DB_NAME);
-        dbo.collection("users").findOne({ username: req.params.username }, { fields: { username: 1, _id: 0 } }, (err, results) => {
-            if (err) throw err;
-            res.send(results);
-            db.close();
-        });
+        if (req.query.email) {
+            dbo.collection("users").findOne({ email: req.query.email }, { fields: { email: 1, _id: 0 } }, (err, results) => {
+                if (err) throw err;
+                res.send(results);
+                db.close();
+            });
+        } else if (req.query.username) {
+            dbo.collection("users").findOne({ username: req.query.username }, { fields: { username: 1, _id: 0 } }, (err, results) => {
+                if (err) throw err;
+                res.send(results);
+                db.close();
+            });
+        }
     });
 });
+
+// router.get('/available/', (req, res) => {
+//     console.log(req.query);
+//     MongoClient(url, (err, db) => {
+//         if (err) throw err;
+//         const dbo = db.db(process.env.DB_NAME);
+//         // if (req.query.email) {
+//         //     dbo.collection("users").findOne({ email: req.query.email }, { fields: { email: 1, _id: 0 } }, (err, results) => {
+//         //         if (err) throw err;
+//         //         res.send(results);
+//         //         db.close();
+//         //     });
+//         // }
+//         if (req.query.username) {
+//             dbo.collection("users").findOne({ username: req.query.username }, { fields: { username: 1, _id: 0 } }, (err, results) => {
+//                 if (err) throw err;
+//                 res.send(results);
+//                 db.close();
+//             });
+        
+//         }
+//     });
+// });
 
 // router.get('/:userParam', (req, res) => {
 //     MongoClient(url, (err, db) => {
@@ -87,7 +119,9 @@ router.get('/available/:username', (req, res) => {
 // });
 
 // create user
-router.post('/', (req, res) => {
+router.post('/register', async (req, res) => {
+    const hashedPassword = await bCrypt.hash(req.body.password, 10); 
+
     MongoClient(url, (err, db) => {
         if (err) throw err;
         const dbo = db.db(process.env.DB_NAME);
@@ -95,12 +129,13 @@ router.post('/', (req, res) => {
             displayName: req.body.displayName,
             username: req.body.username,
             email: req.body.email,
+            password: hashedPassword,
             description: req.body.description,
             joinDate: new Date(),
             status: "active"
         }, (err, results) => {
             if (err) throw err;
-            res.send(results);
+            res.send("User created");
             db.close();
         });
     })

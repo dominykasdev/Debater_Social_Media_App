@@ -3,6 +3,9 @@ export default (state = {}, action) => {
         case 'FETCH_USER_DATA':
             // return { ...state, currentUserData: action.payload };
             return action.payload;
+        case 'REGISTER_USER':
+            // return { ...state, currentUserData: action.payload };
+            return action.payload;
         default:
             return state;
     }

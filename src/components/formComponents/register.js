@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchUserData } from '../../actions';
-import { Field, reduxForm, getFormValues, getFormSyncErrors } from 'redux-form';
+import { registerUser } from '../../actions';
+import { Field, reduxForm, getFormValues, getFormSyncErrors, reset } from 'redux-form';
 import { Container, Button, Form, Message, Progress, Checkbox, Label, Icon } from 'semantic-ui-react';
 import validate from './validate';
 import asyncValidate from './asyncValidate';
@@ -9,11 +9,11 @@ import asyncValidate from './asyncValidate';
 class RegisterForm extends React.Component {
 
     onSubmit = () => {
-        console.log(this.props.formData);
-        console.log(this.props.formErrors);
+        this.props.registerUser(this.props.formData);
+        reset();
     }
 
-    progressBarCounter(errors = this.props.formErrors){
+    progressBarCounter(errors = 0){
         const numOfErrors = Object.keys(errors).length;
         return 4-numOfErrors;
     }
@@ -26,7 +26,7 @@ class RegisterForm extends React.Component {
                     <Field name="email" type="email" component={renderField} label="Email" placeholder="Enter your email that you will use to login" icon="at" />
                     <Field name="password" type="password" component={renderField} label="Password" placeholder="" />
                     <Field name="confirmPassword" type="password" component={renderField} label="Confirm your Password" placeholder="" />
-                    <Progress active autoSuccess size="small" color="orange" label={this.progressBarCounter() === 4 ? "You're good to go!" : "Registration progress..."} value={this.progressBarCounter()} total='4' />
+                    <Progress active autoSuccess size="small" color="orange" label={this.progressBarCounter(this.props.formErrors) === 4 ? "You're good to go!" : "Registration progress..."} value={this.progressBarCounter(this.props.formErrors)} total='4' />
                     <Button color="orange" type="submit">Register</Button>
                 </Form>
             </Container>
@@ -55,6 +55,6 @@ const mapStateToProps = (state) => {
     return { formData: getFormValues('register')(state), formErrors: getFormSyncErrors('register')(state) }
 }
 
-RegisterForm = reduxForm({ form: 'register', validate, asyncValidate, asyncBlurFields: ['username'] })(RegisterForm);
+RegisterForm = reduxForm({ form: 'register', validate, asyncValidate, asyncBlurFields: ['username', 'email'] })(RegisterForm);
 
-export default connect(mapStateToProps, { fetchUserData, getFormSyncErrors })(RegisterForm);
+export default connect(mapStateToProps, { getFormSyncErrors, registerUser })(RegisterForm);
