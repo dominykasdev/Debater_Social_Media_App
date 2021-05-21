@@ -1,21 +1,25 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { Container, Button, Form, Message, Progress, Checkbox } from 'semantic-ui-react';
+import {connect} from 'react-redux';
+import { Field, reduxForm, getFormValues } from 'redux-form';
+import { Container, Button, Form, Icon} from 'semantic-ui-react';
+import { login } from '../../actions';
+import {validateLogin as validate} from './validate';
 
 
 class LoginForm extends React.Component {
 
     onSubmit = () => {
-        console.log(this.props)
+        // console.log(this.props.formData)
+        this.props.login(this.props.formData);
     }
 
     render() {
         return (
-            <Container centered textAlign>
+            <Container>
                 <Form onSubmit={this.props.handleSubmit(this.onSubmit)}>
-                    <Field name="email" type="text" component={renderField} label="Email" placeholder="Enter your email" />
-                    <Field name="password" type="text" component={renderField} label="Password" placeholder="" />
-                    <Button primary type="submit">Login</Button>
+                    <Field name="email" type="text" component={renderField} label="Email" placeholder="Enter your email" icon="user" />
+                    <Field name="password" type="password" component={renderField} label="Password" placeholder="" />
+                    <Button color="orange" type="submit">Login</Button>
                 </Form>
             </Container>
         )
@@ -29,9 +33,19 @@ const renderField = ({
     name,
     placeholder,
     type,
-    meta: { touched, error, warning }
+    meta: { touched, error, warning },
+    icon
 }) => (
-    <Form.Input required fluid inline {...input} value={input.value} name={name} onChange={(param, { value }) => input.onChange(value)} label={label} placeholder={placeholder} />
+    <Form.Input fluid inline {...input} value={input.value} name={name} type={type} onChange={(param, { value }) => input.onChange(value)} label={label} placeholder={placeholder} error={touched && error && { content: error, pointing: "above" }} iconPosition="left">
+        {icon && <Icon color="orange" name={icon} />}
+        <input />
+    </Form.Input>
 );
 
-export default reduxForm({ form: 'login' })(LoginForm);
+const mapStateToProps = (state) => {
+    return { formData: getFormValues('login')(state) }
+}
+
+LoginForm = reduxForm({ form: 'login', validate })(LoginForm);
+
+export default connect(mapStateToProps, { login })(LoginForm);

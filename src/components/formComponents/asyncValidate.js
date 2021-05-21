@@ -1,4 +1,4 @@
-import api from "../../api/connect";
+import {api} from "../../api/connect";
 
 const asyncValidate = async (values /*, dispatch */) => {
     const username = values.username;

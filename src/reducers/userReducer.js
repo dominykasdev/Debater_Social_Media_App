@@ -6,6 +6,12 @@ export default (state = {}, action) => {
         case 'REGISTER_USER':
             // return { ...state, currentUserData: action.payload };
             return action.payload;
+        case 'LOGIN':
+            // return { ...state, currentUserData: action.payload };
+            return action.payload;
+        case 'LOGOUT':
+            // return { ...state, currentUserData: action.payload };
+            return action.payload;
         default:
             return state;
     }

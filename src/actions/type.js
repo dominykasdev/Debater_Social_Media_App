@@ -7,3 +7,5 @@ export const FETCH_COMMENT_FEED = "FETCH_COMMENT_FEED";
 export const UPDATE_COMMENT = "UPDATE_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const REGISTER_USER = "REGISTER_USER";
+export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";

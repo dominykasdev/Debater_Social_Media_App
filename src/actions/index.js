@@ -1,5 +1,5 @@
-import api from "../api/connect";
-import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED, UPDATE_COMMENT, DELETE_COMMENT, REGISTER_USER } from "./type";
+import {api, baseURL} from "../api/connect";
+import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED, UPDATE_COMMENT, DELETE_COMMENT, REGISTER_USER, LOGIN, LOGOUT } from "./type";
 import history from '../history';
 
 export const fetchUserData = (userId) => async (dispatch, getState) => {
@@ -22,16 +22,31 @@ export const fetchUserData = (userId) => async (dispatch, getState) => {
 //   if (action == 'update_holdings') { history.push("/projects/crypto_app/holdings") };
 // }
 
+export const login = (loginData) => async (dispatch, getState) => {
+  const path = "/login/";
+
+  const response = await baseURL.get(
+    path, loginData
+  ).catch((error) => {
+    console.log(error);
+  });
+
+  dispatch({ type: LOGIN, payload: response.data });
+  if (!response.data === "No User Exists") {
+    // setTimeout(() => {
+      history.push("/");
+    // }, 3000);
+  }
+}
+
 export const registerUser = (registerData) => async (dispatch, getState) => {
   const path = "/users/register/";
 
-  // console.log(registerData);
   const response = await api.post(
     path, registerData
   ).catch((error) => {
     console.log(error);
   });
-  // console.log(response);
 
   dispatch({ type: REGISTER_USER, payload: response.data });
   if (!response.error) {
@@ -39,7 +54,6 @@ export const registerUser = (registerData) => async (dispatch, getState) => {
       history.push("/login");
     }, 3000);
   }
-
 }
 
 export const fetchPostData = (postId) => async (dispatch, getState) => {

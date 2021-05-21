@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions';
-import { Field, reduxForm, getFormValues, getFormSyncErrors, reset, isSubmitting, isPristine } from 'redux-form';
+import { Field, reduxForm, getFormValues, getFormSyncErrors } from 'redux-form';
 import { Container, Button, Form, Message, Progress, Checkbox, Label, Icon } from 'semantic-ui-react';
-import validate from './validate';
+import {validateRegister as validate} from './validate';
 import asyncValidate from './asyncValidate';
 
 class RegisterForm extends React.Component {
@@ -12,13 +12,12 @@ class RegisterForm extends React.Component {
         this.props.registerUser(this.props.formData);
     }
 
-    progressBarCounter(errors = 0) {
+    progressBarCounter(errors = {}) {
         const numOfErrors = Object.keys(errors).length;
         return 4 - numOfErrors;
     }
 
     render() {
-        console.log(this.props);
         return (
             <Container>
                 <Form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui centered text aligned" success={this.props.submitSucceeded}>
