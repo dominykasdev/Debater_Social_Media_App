@@ -38,7 +38,7 @@ class RegisterForm extends React.Component {
                         header='Registration completed'
                         content="You are now able to login! Redirecting..."
                     />
-                    <Button color="orange" type="submit" disabled={this.props.pristine || this.props.submitting}>Register</Button>
+                    <Button color="orange" type="submit" disabled={this.props.pristine}>Register</Button>
                 </Form>
             </Container>
         )
