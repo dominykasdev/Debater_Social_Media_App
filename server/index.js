@@ -15,10 +15,6 @@ const corsOptions = {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true}));
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use('/api/users', cors(corsOptions), require('./routers/api/users'));
 app.use('/api/posts', cors(corsOptions), require('./routers/api/posts'));
 app.use('/api/comments', cors(corsOptions), require('./routers/api/comments'));

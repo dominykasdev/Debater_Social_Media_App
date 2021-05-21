@@ -1,5 +1,5 @@
 import api from "../api/connect";
-import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED, UPDATE_COMMENT, DELETE_COMMENT, REGISTER_USER} from "./type";
+import { SIGN_IN, SIGN_OUT, FETCH_USER_DATA, FETCH_POST_DATA, FETCH_POST_FEED, FETCH_COMMENT_FEED, UPDATE_COMMENT, DELETE_COMMENT, REGISTER_USER } from "./type";
 import history from '../history';
 
 export const fetchUserData = (userId) => async (dispatch, getState) => {
@@ -25,16 +25,21 @@ export const fetchUserData = (userId) => async (dispatch, getState) => {
 export const registerUser = (registerData) => async (dispatch, getState) => {
   const path = "/users/register/";
 
-  console.log(registerData);
+  // console.log(registerData);
   const response = await api.post(
     path, registerData
   ).catch((error) => {
     console.log(error);
   });
-  console.log(response);
+  // console.log(response);
 
   dispatch({ type: REGISTER_USER, payload: response.data });
-  // history.push("/login");
+  if (!response.error) {
+    setTimeout(() => {
+      history.push("/login");
+    }, 3000);
+  }
+
 }
 
 export const fetchPostData = (postId) => async (dispatch, getState) => {
@@ -45,7 +50,7 @@ export const fetchPostData = (postId) => async (dispatch, getState) => {
 
 export const fetchPostFeed = (user, orderBy = "timestamp", order = 1) => async (dispatch, getState) => {
   let path;
-  user ? path = `/posts/?user=${user}&orderBy=${orderBy}&order=${order}` : path="/posts/";  
+  user ? path = `/posts/?user=${user}&orderBy=${orderBy}&order=${order}` : path = "/posts/";
   console.log(path);
   const response = await api.get(path);
   dispatch({ type: FETCH_POST_FEED, payload: response.data });
@@ -53,14 +58,14 @@ export const fetchPostFeed = (user, orderBy = "timestamp", order = 1) => async (
 
 export const fetchCommentFeed = (postId, orderBy = "timestamp", order = 1) => async (dispatch, getState) => {
   let path;
-  postId ? path = `/comments/?postId=${postId}&orderBy=${orderBy}&order=${order}` : path="/posts/";  
+  postId ? path = `/comments/?postId=${postId}&orderBy=${orderBy}&order=${order}` : path = "/posts/";
   console.log(path);
   const response = await api.get(path).catch(error => {
     if (!error.response) {
-        // network error
-        this.errorStatus = 'Error: Network Error';
+      // network error
+      this.errorStatus = 'Error: Network Error';
     } else {
-        this.errorStatus = error.response.data.message;
+      this.errorStatus = error.response.data.message;
     }
   });
   dispatch({ type: FETCH_COMMENT_FEED, payload: response.data });

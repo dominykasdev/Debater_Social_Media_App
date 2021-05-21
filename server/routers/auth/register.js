@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const bCrypt = require('bcryptjs');
 
+// app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true}));
+// app.use(passport.initialize());
+// app.use(passport.session());
+
 // create user
 app.post('/', async (req, res) => {
     const hashedPassword = await bCrypt.hash(req.body.password, 10); 
