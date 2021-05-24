@@ -1,19 +1,19 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { Field, reduxForm, getFormValues } from 'redux-form';
-import { Container, Button, Form, Icon} from 'semantic-ui-react';
+import { Container, Button, Form, Icon, Message } from 'semantic-ui-react';
 import { login } from '../../actions';
-import {validateLogin as validate} from './validate';
+import { validateLogin as validate } from './validate';
 
 
 class LoginForm extends React.Component {
 
     onSubmit = () => {
-        // console.log(this.props.formData)
         this.props.login(this.props.formData);
     }
 
     render() {
+        console.log(this.props.userData);
         return (
             <Container>
                 <Form onSubmit={this.props.handleSubmit(this.onSubmit)}>
@@ -21,6 +21,10 @@ class LoginForm extends React.Component {
                     <Field name="password" type="password" component={renderField} label="Password" placeholder="" />
                     <Button color="orange" type="submit">Login</Button>
                 </Form>
+                {this.props.userData === "No User Exists" && <Message
+                    error
+                    header='Cannot login'
+                    content="Email not recognised" />}
             </Container>
         )
 
@@ -43,7 +47,7 @@ const renderField = ({
 );
 
 const mapStateToProps = (state) => {
-    return { formData: getFormValues('login')(state) }
+    return { formData: getFormValues('login')(state), userData: state.user }
 }
 
 LoginForm = reduxForm({ form: 'login', validate })(LoginForm);

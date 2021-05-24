@@ -49,7 +49,7 @@ class PostFeed extends React.Component {
     }
 
     render() {
-        // console.log(this.props.postFeed);
+        console.log(this.props.postFeed);
         if (this.props.postFeed.length) {
             // let editTimestamp;
             // if (this.props.editTimestamp) editTimestamp = `Last edited on ${this.props.editTimestamp}`;
@@ -57,6 +57,14 @@ class PostFeed extends React.Component {
                 <Container text>
                     <Segment>
                         {this.postFeedList()}
+                    </Segment>
+                </Container>
+            )
+        } else if (this.props.postFeed.length == 0) {
+            return (
+                <Container text>
+                    <Segment>
+                        This user has no posts
                     </Segment>
                 </Container>
             )

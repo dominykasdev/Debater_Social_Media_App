@@ -8,7 +8,7 @@ require('dotenv').config()
 
 const corsOptions = {
     origin: process.env.CORS_ORIGIN_DEV,
-    // methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     Credential: true,
     optionsSuccessStatus: 200
 }
@@ -31,12 +31,16 @@ app.use('/api/comments', cors(corsOptions), require('./routers/api/comments'));
 app.use("/login", cors(corsOptions), (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
       if (err) throw err;
-      if (!user) res.send("No User Exists");
+      // console.log(req.body);
+      // console.log(user);
+      // console.log(info)
+      if (!user) res.send("User not found");
       else {
         req.logIn(user, (err) => {
+          // console.log(user);
           if (err) throw err;
-          res.send("Successfully Authenticated");
-          console.log(req.user);
+          res.send(user.username);
+          // console.log(`LogIn: ${req.user}`);
         });
       }
     })(req, res, next);

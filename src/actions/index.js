@@ -23,16 +23,15 @@ export const fetchUserData = (userId) => async (dispatch, getState) => {
 // }
 
 export const login = (loginData) => async (dispatch, getState) => {
-  const path = "/login/";
-
-  const response = await baseURL.get(
+  const path = "/login";
+  const response = await baseURL.post(
     path, loginData
   ).catch((error) => {
     console.log(error);
   });
 
   dispatch({ type: LOGIN, payload: response.data });
-  if (!response.data === "No User Exists") {
+  if (!response.data === "User not found") {
     // setTimeout(() => {
       history.push("/");
     // }, 3000);

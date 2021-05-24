@@ -15,7 +15,7 @@ class UserProfile extends React.Component {
     }
 
     render() {
-        if (this.props.displayName) {
+        if (this.props.username) {
             return (
                 <Container>
                     <Item>
